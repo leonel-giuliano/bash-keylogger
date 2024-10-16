@@ -14,7 +14,8 @@ typedef uint8_t errorEvent_t;
 enum {
     NO_ERROR,
     ERROR_GETATTR,
-    ERROR_SETATTR
+    ERROR_SETATTR,
+    ERROR_READ
 };
 
 
@@ -27,7 +28,7 @@ errorEvent_t setFlags(struct termios *_Termios);
 errorEvent_t defFlags(struct termios *_Termios);
 
 // Prints error msg depending on the event
-errorEvent_t errorHanlder(errorEvent_t _Error);
+errorEvent_t errorHandler(errorEvent_t _Error);
 
 
 #endif

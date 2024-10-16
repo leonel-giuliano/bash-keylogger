@@ -11,11 +11,18 @@ int main(void) {
     struct termios tm;
     errorEvent_t e;
 
-    if((e = setFlags(&tm)) != 0) return errorHanlder(e);
+    if((e = setFlags(&tm)) != 0) return errorHandler(e);
 
     printf("Insert any key (%c exits the code):\n", EXIT_C);
 
-    if(defFlags(&tm)) return errorHanlder(ERROR_SETATTR);
+    char c;
+    do {
+        if(read(STDIN_FILENO, &c, sizeof(char)) == -1) return errorHandler(ERROR_READ);
+
+        printf("%c\n", c);
+    } while(c != EXIT_C);
+
+    if(defFlags(&tm)) return errorHandler(ERROR_SETATTR);
     return 0;
 }
 
@@ -40,7 +47,7 @@ errorEvent_t defFlags(struct termios *tm) {
 }
 
 
-errorEvent_t errorHanlder(errorEvent_t e) {
+errorEvent_t errorHandler(errorEvent_t e) {
     fprintf(stderr, "\nbash-keylogger: ");
 
     switch (e) {
@@ -57,6 +64,15 @@ errorEvent_t errorHanlder(errorEvent_t e) {
             fprintf(
                 stderr,
                 "problem modifying the terminal config: %s\n",
+                strerror(errno)
+            );
+
+            break;
+
+        case ERROR_READ:
+            fprintf(
+                stderr,
+                "problem reading the stdin: %s\n",
                 strerror(errno)
             );
 
