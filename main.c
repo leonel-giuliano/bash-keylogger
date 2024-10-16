@@ -1,7 +1,22 @@
+#include <stdio.h>
 #include <unistd.h>
+#include <errno.h>
 #include <termios.h>
+#include <string.h>
 
 #include "main.h"
+
+
+int main(void) {
+    struct termios tm;
+    errorEvent_t e;
+
+    if((e = setFlags(&tm)) != 0) return errorHanlder(e);
+
+    printf("Insert any key (%c exits the code):\n", EXIT_C);
+
+    return 0;
+}
 
 
 errorEvent_t setFlags(struct termios *tm) {
@@ -14,4 +29,31 @@ errorEvent_t setFlags(struct termios *tm) {
     if((tcsetattr(STDIN_FILENO, TCSANOW, tm)) == -1) return ERROR_GETATTR;
 
     return 0;
+}
+
+
+errorEvent_t errorHanlder(errorEvent_t e) {
+    fprintf(stderr, "\nbash-keylogger: ");
+
+    switch (e) {
+        case ERROR_GETATTR:
+            fprintf(
+                stderr,
+                "problem accessing the terminal config: %s\n",
+                strerror(errno)
+            );
+
+            break;
+
+        case ERROR_SETATTR:
+            fprintf(
+                stderr,
+                "problem modifying the terminal config: %s\n",
+                strerror(errno)
+            );
+
+            break;
+    }
+
+    return e;
 }
