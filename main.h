@@ -22,6 +22,10 @@ enum {
 // Can return ERROR_GETATTR or ERROR_SETATTR
 errorEvent_t setFlags(struct termios *_Termios);
 
+// Activates ICANON and ECHO
+// Can return ERROR_SETATTR
+errorEvent_t defFlags(struct termios *_Termios);
+
 // Prints error msg depending on the event
 errorEvent_t errorHanlder(errorEvent_t _Error);
 

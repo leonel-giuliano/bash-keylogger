@@ -15,6 +15,7 @@ int main(void) {
 
     printf("Insert any key (%c exits the code):\n", EXIT_C);
 
+    if(defFlags(&tm)) return errorHanlder(ERROR_SETATTR);
     return 0;
 }
 
@@ -25,8 +26,15 @@ errorEvent_t setFlags(struct termios *tm) {
 
     // Read data input without pressing Enter and do not display it
     tm->c_lflag &= ~(ICANON | ECHO);
+    if((tcsetattr(STDIN_FILENO, TCSANOW, tm)) == -1) return ERROR_SETATTR;
 
-    if((tcsetattr(STDIN_FILENO, TCSANOW, tm)) == -1) return ERROR_GETATTR;
+    return 0;
+}
+
+
+errorEvent_t defFlags(struct termios *tm) {
+    tm->c_lflag |= (ICANON | ECHO);
+    if((tcsetattr(STDIN_FILENO, TCSANOW, tm)) == -1) return ERROR_SETATTR;
 
     return 0;
 }
