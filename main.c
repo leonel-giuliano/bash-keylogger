@@ -13,7 +13,7 @@ int main(void) {
 
     if((e = setFlags(&tm)) != 0) return errorHandler(e);
 
-    printf("Insert any key (%c exits the code):\n", EXIT_C);
+    printf("Insert any key (%s exits the code):\n", EXIT_STR);
 
     char c;
     do {

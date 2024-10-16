@@ -6,7 +6,8 @@
 #include <stdint.h>
 
 
-#define EXIT_C '1'
+#define EXIT_STR "Ctrl + H"
+#define EXIT_C (char)0x08
 
 // ERROR EVENTS
 
